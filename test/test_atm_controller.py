@@ -63,3 +63,17 @@ class TestATMController(unittest.TestCase):
         self.controller.enter_pin(self.test_pin)
         with self.assertRaises(Exception):
             self.controller.select_account("ACC123")
+
+    def test_check_balance(self):
+        """[잔액 조회] 잔액이 정상적으로 조회되는지 확인"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC123"]
+        self.mock_bank_service.get_balance.return_value = 100
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        self.controller.select_account("ACC123")
+
+        balance = self.controller.check_balance()
+        self.assertEqual(balance, 100)
+        self.mock_bank_service.get_balance.assert_called_once_with("ACC123")
