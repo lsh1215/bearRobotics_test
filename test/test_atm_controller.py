@@ -42,3 +42,24 @@ class TestATMController(unittest.TestCase):
         result = self.controller.enter_pin(self.test_pin)
         self.assertFalse(result)
         self.assertFalse(self.controller.authorized)
+
+
+    def test_select_account_success(self):
+        """[계좌 선택] 올바른 계좌 선택 성공"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC123", "ACC456"]
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        self.controller.select_account("ACC123")
+        self.assertEqual(self.controller.current_account, "ACC123")
+
+    def test_select_account_failure(self):
+        """[계좌 선택] 잘못된 계좌 선택 실패"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC999"]
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        with self.assertRaises(Exception):
+            self.controller.select_account("ACC123")
