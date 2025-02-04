@@ -31,3 +31,8 @@ class ATMController:
             raise Exception("잘못된 계좌가 선택되었습니다")
 
         self.current_account = account_id
+
+    def check_balance(self) -> int:
+        if self.current_account is None:
+            raise Exception("계좌가 선택되지 않았습니다")
+        return self.bank_service.get_balance(self.current_account)
