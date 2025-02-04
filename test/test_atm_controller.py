@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+from model.bank_service import BankService
+from controller.atm_controller import ATMController
 
 class TestATMController(unittest.TestCase):
 
@@ -18,4 +20,25 @@ class TestATMController(unittest.TestCase):
         """[카드 삽입] 카드 번호가 정상적으로 저장되는지 확인"""
         self.controller.insert_card(self.test_card_number)
         self.assertEqual(self.controller.card_number, self.test_card_number)
+        self.assertFalse(self.controller.authorized)
+
+    def test_enter_pin_correct(self):
+        """[PIN 검증] 올바른 PIN -> 인증 성공"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.controller.insert_card(self.test_card_number)
+
+        result = self.controller.enter_pin(self.test_pin)
+        self.assertTrue(result)
+        self.assertTrue(self.controller.authorized)
+        self.mock_bank_service.verify_pin.assert_called_once_with(
+            self.test_card_number, self.test_pin
+        )
+
+    def test_enter_pin_incorrect(self):
+        """[PIN 검증] 틀린 PIN -> 인증 실패"""
+        self.mock_bank_service.verify_pin.return_value = False
+        self.controller.insert_card(self.test_card_number)
+
+        result = self.controller.enter_pin(self.test_pin)
+        self.assertFalse(result)
         self.assertFalse(self.controller.authorized)
