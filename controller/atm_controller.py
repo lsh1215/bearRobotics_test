@@ -21,3 +21,13 @@ class ATMController:
         pin_correct = self.bank_service.verify_pin(self.card_number, pin)
         self.authorized = pin_correct
         return pin_correct
+
+    def select_account(self, account_id: str):
+        if not self.authorized:
+            raise Exception("아직 인증되지 않았습니다")
+
+        accounts = self.bank_service.get_accounts(self.card_number)
+        if account_id not in accounts:
+            raise Exception("잘못된 계좌가 선택되었습니다")
+
+        self.current_account = account_id
