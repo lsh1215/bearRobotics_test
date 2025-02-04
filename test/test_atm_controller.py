@@ -77,3 +77,47 @@ class TestATMController(unittest.TestCase):
         balance = self.controller.check_balance()
         self.assertEqual(balance, 100)
         self.mock_bank_service.get_balance.assert_called_once_with("ACC123")
+
+    def test_deposit(self):
+        """[입금] 입금이 정상적으로 처리되는지 확인"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC123"]
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        self.controller.select_account("ACC123")
+
+        self.controller.deposit(50)
+        self.mock_bank_service.deposit.assert_called_once_with("ACC123", 50)
+
+    def test_withdraw_success(self):
+        """[출금] 출금이 정상적으로 처리되는지 확인"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC123"]
+        self.mock_bank_service.withdraw.return_value = True
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        self.controller.select_account("ACC123")
+
+        result = self.controller.withdraw(40)
+        self.assertTrue(result)
+        self.mock_bank_service.withdraw.assert_called_once_with("ACC123", 40)
+
+    def test_withdraw_failure(self):
+        """[출금] 출금 실패 (잔액 부족)"""
+        self.mock_bank_service.verify_pin.return_value = True
+        self.mock_bank_service.get_accounts.return_value = ["ACC123"]
+        self.mock_bank_service.withdraw.return_value = False
+
+        self.controller.insert_card(self.test_card_number)
+        self.controller.enter_pin(self.test_pin)
+        self.controller.select_account("ACC123")
+
+        result = self.controller.withdraw(1000)
+        self.assertFalse(result)
+        self.mock_bank_service.withdraw.assert_called_once_with("ACC123", 1000)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
