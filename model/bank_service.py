@@ -15,3 +15,16 @@ class BankService(ABC):
     def get_balance(self, account_id: str) -> int:
         """계좌 잔액을 반환"""
         pass
+
+    @abstractmethod
+    def deposit(self, account_id: str, amount: int):
+        """계좌에 amount만큼 입금"""
+        pass
+
+    @abstractmethod
+    def withdraw(self, account_id: str, amount: int) -> bool:
+        """
+        계좌에서 amount만큼 출금
+        출금 성공 시 True, 실패 시 False
+        """
+        pass

@@ -36,3 +36,13 @@ class ATMController:
         if self.current_account is None:
             raise Exception("계좌가 선택되지 않았습니다")
         return self.bank_service.get_balance(self.current_account)
+
+    def deposit(self, amount: int):
+        if self.current_account is None:
+            raise Exception("계좌가 선택되지 않았습니다")
+        self.bank_service.deposit(self.current_account, amount)
+
+    def withdraw(self, amount: int) -> bool:
+        if self.current_account is None:
+            raise Exception("계좌가 선택되지 않았습니다")
+        return self.bank_service.withdraw(self.current_account, amount)
