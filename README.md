@@ -44,10 +44,15 @@ path : root 디렉토리
 
 ```bash
 python -m view.atm_view
+
+python -m pytest
 ```
 
 <br>
 
 https://github.com/user-attachments/assets/e888fa57-1aea-4800-bab6-f88f7c0acf4c
 
+<br>
+
+<img width="894" alt="image" src="https://github.com/user-attachments/assets/140cf1a9-6ade-4881-86ed-8e00f67b02b1" />
 
