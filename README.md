@@ -38,10 +38,16 @@
 4. Test 코드 작성을 통한 서비스 테스트
 
 
-## 실행 방법
+## 실행 방법 및 시연 영상
 
 path : root 디렉토리
 
 ```bash
 python -m view.atm_view
 ```
+
+<br>
+
+https://github.com/user-attachments/assets/e888fa57-1aea-4800-bab6-f88f7c0acf4c
+
+
