@@ -26,3 +26,15 @@ class BankServiceImpl(BankService):
     def get_balance(self, account_id: str) -> int:
         return self.balances.get(account_id, 0)
 
+    def deposit(self, account_id: str, amount: int):
+        if account_id not in self.balances:
+            self.balances[account_id] = 0
+        self.balances[account_id] += amount
+
+    def withdraw(self, account_id: str, amount: int) -> bool:
+        if account_id not in self.balances:
+            return False
+        if self.balances[account_id] < amount:
+            return False
+        self.balances[account_id] -= amount
+        return True
