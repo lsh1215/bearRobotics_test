@@ -36,3 +36,12 @@
 2. MVC 패턴을 적용하여 ATM 컨트롤러 구현
 3. ATM 컨트롤러의 각 기능을 담당하는 서비스 구현
 4. Test 코드 작성을 통한 서비스 테스트
+
+
+## 실행 방법
+
+path : root 디렉토리
+
+```bash
+python -m view.atm_view
+```
